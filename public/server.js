@@ -14,9 +14,30 @@ cache['openhouse.css'] = fs.readFileSync('openhouse.css');
 cache['openhouse.js'] = fs.readFileSync('openhouse.js');
 
 
+/**
+ * 
+ * @param {*} path 
+ * @param {*} res 
+ */
 function serveIndex(path, res)
 {
-
+    fs.readdir(path, function(err, files)
+    {
+        if (err)
+        {
+            console.error(err);
+            res.statusCode =  500;
+            res.end("Server Error");
+        }
+        var html = "<p>Index of " + path + "</p"
+        html += "<ul>";
+        html += files.map(function(item)
+        {
+            return "<a href='"+item+"'>" + item + "</a>";
+        }).join("");
+        html += "</ul>";
+        res.end(html);
+    });
 }
 
 
@@ -50,7 +71,7 @@ function handleRequest(req, res)
     switch(req.url)
    {
        case '/':
-            serveIndex('public',res);
+            serveIndex('/',res);
             break;
        case '/openhouse.html':
             //res.end(cache['openhouse.html']);
