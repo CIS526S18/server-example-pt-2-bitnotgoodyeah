@@ -3,6 +3,10 @@ const PORT = 3000;
 //import http library
 const http = require('http');
 const fs = require('fs');
+const cache = {};
+cache['openhouse.html'] = fs.readFileSync('openhouse.html');
+cache['openhouse.css'] = fs.readFileSync('openhouse.css');
+cache['openhouse.js'] = fs.readFileSync('openhouse.js');
 function handleRequest(req, res)
 {
     console.log(req.url);
@@ -10,13 +14,14 @@ function handleRequest(req, res)
    {
        case '/':
        case '/openhouse.html':
-            res.end(fs.readFileSync('openhouse.html'));
+    
+            res.end(cache['openhouse.html']);
             break;
        case '/openhouse.css':
-            res.end(fs.readFileSync('openhouse.css'));
+            res.end(cache['openhouse.css']);
             break;
        case '/openhouse.js':
-            res.end(fs.readFileSync('openhouse.js'));
+            res.end(cache['openhouse.js']);
             break;
        default:
             res.statusCode =  404;
